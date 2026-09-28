@@ -4,6 +4,13 @@
   height: auto;
 }
 
+.threeWrapper {
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  display: block;
+}
+
 .gridBase {
   animation: slideUp var(--motion-fast-4) var(--motion-easing) 0.1s forwards;
   opacity: 0;
