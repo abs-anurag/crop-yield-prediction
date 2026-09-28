@@ -7,154 +7,18 @@
 .threeWrapper {
   width: 100%;
   max-width: 520px;
-  height: auto;
+  aspect-ratio: 4 / 3;
   display: block;
 }
 
-.gridBase {
-  animation: slideUp var(--motion-fast-4) var(--motion-easing) 0.1s forwards;
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.gridLines line {
-  animation: drawLine var(--motion-fast-3) var(--motion-easing) forwards;
-  opacity: 0;
-  stroke-dasharray: 400;
-  stroke-dashoffset: 400;
-}
-
-.gridLines line:nth-child(1) { animation-delay: 0.15s; }
-.gridLines line:nth-child(2) { animation-delay: 0.2s; }
-.gridLines line:nth-child(3) { animation-delay: 0.25s; }
-.gridLines line:nth-child(4) { animation-delay: 0.3s; }
-.gridLines line:nth-child(5) { animation-delay: 0.35s; }
-
-.inputNodes .node {
-  animation: nodeAppear var(--motion-fast-2) var(--motion-easing) forwards;
-  opacity: 0;
-  transform: scale(0);
-  transform-origin: center;
-}
-
-.inputNodes .node:nth-child(1) { animation-delay: 0.4s; }
-.inputNodes .node:nth-child(2) { animation-delay: 0.45s; }
-.inputNodes .node:nth-child(3) { animation-delay: 0.5s; }
-.inputNodes .node:nth-child(4) { animation-delay: 0.55s; }
-
-.connectingLines .line {
-  animation: drawLine var(--motion-fast-3) var(--motion-easing) forwards;
-  opacity: 0;
-  stroke-dasharray: 200;
-  stroke-dashoffset: 200;
-}
-
-.connectingLines .line:nth-child(1) { animation-delay: 0.6s; }
-.connectingLines .line:nth-child(2) { animation-delay: 0.65s; }
-.connectingLines .line:nth-child(3) { animation-delay: 0.7s; }
-.connectingLines .line:nth-child(4) { animation-delay: 0.75s; }
-
-.centralNode {
-  animation: nodeAppear var(--motion-fast-2) var(--motion-easing) 0.85s forwards;
-  opacity: 0;
-  transform: scale(0);
-  transform-origin: center;
-}
-
-.pulse {
-  animation: pulse 3s var(--motion-easing) infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.15); opacity: 0.8; }
-}
-
-.outputLine {
-  animation: drawLine var(--motion-fast-4) var(--motion-easing) 1s forwards;
-  opacity: 0;
-  stroke-dasharray: 160;
-  stroke-dashoffset: 160;
-}
-
-.outputNode {
-  animation: nodeAppear var(--motion-fast-2) var(--motion-easing) 1.4s forwards;
-  opacity: 0;
-  transform: scale(0);
-  transform-origin: center;
-}
-
-.labels text {
-  animation: fadeIn var(--motion-fast-2) var(--motion-easing) forwards;
-  opacity: 0;
-}
-
-.labels text:nth-child(1) { animation-delay: 0.45s; }
-.labels text:nth-child(2) { animation-delay: 0.5s; }
-.labels text:nth-child(3) { animation-delay: 0.55s; }
-.labels text:nth-child(4) { animation-delay: 0.6s; }
-
-.aiLabel,
-.yieldLabel {
-  animation: fadeIn var(--motion-fast-2) var(--motion-easing) forwards;
-  opacity: 0;
-}
-
-.aiLabel { animation-delay: 0.9s; }
-.yieldLabel { animation-delay: 1.45s; }
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+@media (max-width: 1023px) {
+  .threeWrapper {
+    max-width: 420px;
   }
 }
 
-@keyframes drawLine {
-  from {
-    opacity: 0;
-    stroke-dashoffset: 400;
-  }
-  to {
-    opacity: 1;
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes nodeAppear {
-  from {
-    opacity: 0;
-    transform: scale(0);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .gridBase,
-  .gridLines line,
-  .inputNodes .node,
-  .connectingLines .line,
-  .centralNode,
-  .outputLine,
-  .outputNode,
-  .labels text,
-  .aiLabel,
-  .yieldLabel {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-    stroke-dashoffset: 0 !important;
+@media (max-width: 767px) {
+  .threeWrapper {
+    max-width: 100%;
   }
 }

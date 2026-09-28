@@ -4,8 +4,10 @@ import styles from './ThreeTerrain.module.css'
 
 export default function ThreeTerrain({ onError }) {
   const canvasRef = useRef(null)
+  const containerRef = useRef(null)
   const [webglError, setWebglError] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 })
 
   const triggerError = useCallback(() => {
     setWebglError(true)
@@ -20,8 +22,26 @@ export default function ThreeTerrain({ onError }) {
     return () => mediaQuery.removeEventListener('change', handler)
   }, [])
 
+  // Track container size for proper canvas sizing
+  useEffect(() => {
+    if (!containerRef.current) return
+    
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect
+        if (width > 0 && height > 0) {
+          setContainerSize({ width, height })
+        }
+      }
+    })
+    
+    resizeObserver.observe(containerRef.current)
+    return () => resizeObserver.disconnect()
+  }, [])
+
   useEffect(() => {
     if (webglError || reducedMotion) return
+    if (containerSize.width === 0 || containerSize.height === 0) return
 
     const canvas = canvasRef.current
     if (!canvas) return
@@ -38,12 +58,12 @@ export default function ThreeTerrain({ onError }) {
         powerPreference: 'high-performance',
       })
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-      renderer.setSize(canvas.clientWidth, canvas.clientHeight)
+      renderer.setSize(containerSize.width, containerSize.height)
       renderer.setClearColor(0x000000, 0)
 
       scene = new THREE.Scene()
 
-      const aspect = canvas.clientWidth / canvas.clientHeight
+      const aspect = containerSize.width / containerSize.height
       const frustumSize = 12
       camera = new THREE.OrthographicCamera(
         frustumSize * aspect / -2,
@@ -92,9 +112,11 @@ export default function ThreeTerrain({ onError }) {
       scene.add(accents)
 
       const handleResize = () => {
-        if (!renderer || !camera || !canvas) return
-        const width = canvas.clientWidth
-        const height = canvas.clientHeight
+        if (!renderer || !camera || !containerRef.current) return
+        const width = containerRef.current.clientWidth
+        const height = containerRef.current.clientHeight
+        if (width === 0 || height === 0) return
+        
         const newAspect = width / height
         const frustumSize = 12
         camera.left = frustumSize * newAspect / -2
@@ -109,6 +131,7 @@ export default function ThreeTerrain({ onError }) {
       const handleMouseMove = (e) => {
         if (reducedMotion) return
         const rect = canvas.getBoundingClientRect()
+        if (rect.width === 0 || rect.height === 0) return
         mouseX = ((e.clientX - rect.left) / rect.width) * 2 - 1
         mouseY = -((e.clientY - rect.top) / rect.height) * 2 + 1
       }
@@ -154,13 +177,17 @@ export default function ThreeTerrain({ onError }) {
       console.warn('Three.js initialization failed, falling back to SVG:', err)
       triggerError()
     }
-  }, [webglError, reducedMotion, triggerError])
+  }, [webglError, reducedMotion, triggerError, containerSize])
 
   if (webglError || reducedMotion) {
     return null
   }
 
-  return <canvas ref={canvasRef} className={styles.canvas} aria-hidden="true" />
+  return (
+    <div ref={containerRef} className={styles.container}>
+      <canvas ref={canvasRef} className={styles.canvas} aria-hidden="true" />
+    </div>
+  )
 }
 
 function createTerrainGeometry() {
@@ -172,7 +199,6 @@ function createTerrainGeometry() {
   const positions = geometry.attributes.position
   const count = positions.count
 
-  const seed = 42
   function noise(x, z) {
     const n = Math.sin(x * 12.9898 + z * 78.233) * 43758.5453
     return (n - Math.floor(n)) * 2 - 1
