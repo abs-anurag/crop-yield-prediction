@@ -1,48 +1,54 @@
 # Dataset Documentation
 
 ## Dataset Information
-- **Name**: Crop Yield Agricultural Benchmark Dataset
-- **Source**: FAO/USDA Agricultural Agronomic Response Benchmark Model
-- **License**: CC BY 4.0 / Public Domain
-- **Download/Creation Date**: 2026-09-28
+- **Name**: FAOSTAT & World Bank Global Crop Yield Dataset
+- **Direct Combined Dataset Reference**: [Kaggle Crop Yield Prediction Dataset](https://www.kaggle.com/datasets/patelris/crop-yield-prediction-dataset) / [GitHub hajir-almahdi/Machine-Learning-Capstone-Project](https://github.com/hajir-almahdi/Machine-Learning-Capstone-Project)
+- **Original Underlying Data Providers**:
+  1. **Food and Agriculture Organization of the United Nations (FAOSTAT)**: Country-level crop yield metrics (`hg/ha_yield`) and pesticide consumption data (`pesticides_tonnes`).
+  2. **World Bank Climate Data API**: Country-level average annual precipitation (`average_rain_fall_mm_per_year`) and average annual surface temperature (`avg_temp`).
+- **License / Data Policy**:
+  - FAOSTAT Open Data Policy (CC BY-3.0 IGO)
+  - World Bank Open Data Terms of Use (CC BY 4.0)
+- **Download Date**: 2026-09-28
 
-## Features
-| Feature | Type | Unit | Range / Values | Description |
-|---------|------|------|----------------|-------------|
-| crop | categorical | - | Wheat, Rice, Maize, Cotton, Sugarcane | Type of crop cultivated |
-| area | numeric | ha | 0.5 - 200.0 | Cultivated land area in hectares |
-| rainfall | numeric | mm | 200.0 - 2500.0 | Annual rainfall received in mm |
-| temperature | numeric | °C | 12.0 - 40.0 | Average growth season temperature |
-| humidity | numeric | % | 30.0 - 95.0 | Average relative humidity |
-| soil_type | categorical | - | Loamy, Sandy, Clay, Silt, Peaty | Primary soil classification |
-| fertilizer | numeric | kg/ha | 10.0 - 450.0 | Total fertilizer applied per hectare |
+---
 
-## Target Variable
-- **Name**: yield
-- **Unit**: tons/hectare
-- **Type**: continuous numeric
-- **Range**: 0.5 - 90.0 tons/ha (varies by crop type: e.g., Sugarcane 40-90 t/ha, Grains 2-8 t/ha)
+## Dataset Schema & Features
+
+| Column Name | Data Type | Role | Original Unit | Description |
+|-------------|-----------|------|---------------|-------------|
+| `Area` | String | Feature (Categorical) | - | Country / Region name (101 unique countries) |
+| `Item` | String | Feature (Categorical) | - | Crop type (10 unique crops) |
+| `Year` | Integer | Feature (Numerical) | Year | Year of observation (1990 - 2013) |
+| `average_rain_fall_mm_per_year` | Float | Feature (Numerical) | mm/year | Average annual precipitation |
+| `pesticides_tonnes` | Float | Feature (Numerical) | Tonnes | Total pesticide usage in tonnes |
+| `avg_temp` | Float | Feature (Numerical) | °C | Average annual surface temperature |
+| `hg/ha_yield` | Integer | Target Variable | hg/ha | Crop yield in hectograms per hectare |
+
+---
+
+## Target Variable & Unit Conversion
+- **Original Field**: `hg/ha_yield` (hectograms / hectare)
+- **Converted Field**: `yield_tons_per_ha` (metric tons / hectare)
+- **Conversion Math**: $1 \text{ hectogram (hg)} = 100 \text{ grams} = 0.1 \text{ kg}$. Therefore $10,000 \text{ hg/ha} = 1,000 \text{ kg/ha} = 1 \text{ metric ton/hectare}$.
+$$\text{yield (tons/ha)} = \frac{\text{hg/ha\_yield}}{10000.0}$$
+- **Target Value Range**:
+  - `hg/ha_yield`: 50 to 501,412 hg/ha
+  - `yield_tons_per_ha`: 0.005 to 50.14 tons/ha (Mean: ~7.70 tons/ha)
+
+---
 
 ## Dataset Statistics
-- **Number of Records**: 1500
-- **Geographic Scope**: Multi-regional agricultural zones
-- **Date Range**: Multi-year seasonal aggregated records
-- **Missing Values**: 0 (Complete dataset)
+- **Total Records**: 28,242 rows
+- **Missing Values**: 0 across all columns
+- **Duplicate Rows**: 0
+- **Crops Included (10)**: `Maize`, `Potatoes`, `Rice, paddy`, `Sorghum`, `Soybeans`, `Wheat`, `Cassava`, `Sweet potatoes`, `Plantains and others`, `Yams`
+- **Geographic Scope**: 101 countries worldwide
+- **Time Period**: 1990 to 2013 (24 annual snapshots)
 
-## Known Limitations
-- Yield outputs reflect standardized environmental interactions and optimal pest management.
-- Extremes in unmodeled weather events (e.g., flash floods, hail) are not explicitly present.
+---
 
-## Data Dictionary
-1. `crop`: Primary agricultural crop cultivated in the given plot.
-2. `area`: Total land plot area used for crop production in hectares (ha).
-3. `rainfall`: Total cumulative annual precipitation recorded in millimeters (mm).
-4. `temperature`: Seasonal average ambient temperature in degrees Celsius (°C).
-5. `humidity`: Seasonal mean relative humidity percentage (%).
-6. `soil_type`: Soil physical texture and classification.
-7. `fertilizer`: Amount of NPK/organic fertilizer applied in kilograms per hectare (kg/ha).
-8. `yield`: Final harvest yield per hectare measured in metric tons per hectare (tons/ha).
-
-## Preprocessing Notes
-- Categorical features (`crop`, `soil_type`) encoded using `OneHotEncoder(sparse_output=False, handle_unknown='ignore')`.
-- Numerical features (`area`, `rainfall`, `temperature`, `humidity`, `fertilizer`) scaled using `StandardScaler()`.
+## Important Data Notes
+- Features reflect real historical observations collected by international bodies (FAO & World Bank).
+- `pesticides_tonnes` measures country-level pesticide consumption in tonnes.
+- Features such as `soil_type`, `humidity`, or plot-level `area` are not present in this dataset and are not fabricated.

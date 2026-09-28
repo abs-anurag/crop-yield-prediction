@@ -1,5 +1,5 @@
 """
-Model evaluation functions for calculating MAE, RMSE, and R2.
+Model evaluation functions for calculating MAE, RMSE, and R2 metrics on real dataset.
 """
 
 from typing import Dict
@@ -9,7 +9,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 def evaluate_model(y_true: np.ndarray, y_pred: np.ndarray) -> Dict[str, float]:
     """
-    Evaluates model predictions against ground truth labels.
+    Evaluates model predictions against ground truth target values.
 
     Returns dictionary containing MAE, RMSE, and R2 metrics.
     """
@@ -24,10 +24,10 @@ def evaluate_model(y_true: np.ndarray, y_pred: np.ndarray) -> Dict[str, float]:
     }
 
 
-def print_evaluation_summary(model_name: str, metrics: Dict[str, float]) -> None:
+def print_evaluation_summary(model_name: str, metrics: Dict[str, float], unit: str = "tons/ha") -> None:
     """Prints formatted evaluation metrics summary."""
     print(f"--- Evaluation Metrics for {model_name} ---")
-    print(f"MAE  : {metrics['mae']:.4f}")
-    print(f"RMSE : {metrics['rmse']:.4f}")
+    print(f"MAE  : {metrics['mae']:.4f} {unit}")
+    print(f"RMSE : {metrics['rmse']:.4f} {unit}")
     print(f"R²   : {metrics['r2']:.4f}")
-    print("-" * (27 + len(model_name)))
+    print("-" * (32 + len(model_name)))

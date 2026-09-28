@@ -1,48 +1,41 @@
 # ML Module Documentation
 
 ## Overview
-The ML module processes raw crop yield agricultural data, fits a scikit-learn preprocessing pipeline, trains and evaluates machine learning models (Linear Regression baseline and Random Forest regressor), and exposes the standard `predict_yield(input_dict)` inference interface.
+The ML module processes real international crop yield data from the **FAOSTAT & World Bank Global Crop Yield Dataset**, builds a Scikit-Learn preprocessing pipeline, trains and evaluates machine learning models (Linear Regression baseline and Random Forest regressor), and exposes the standard `predict_yield(input_dict)` inference interface.
 
 ---
 
 ## Files & Structure
-- `features.py` - Authoritative feature definitions, constants, categories, and range constraints.
-- `preprocessing.py` - Preprocessing pipeline construction (`OneHotEncoder` for categoricals, `StandardScaler` for numerics).
-- `train.py` - Training pipeline script: loads data, splits train/test, fits preprocessor, trains models, evaluates metrics, selects the best model, and saves `.joblib` artifacts.
+- `features.py` - Authoritative feature definitions (`Area`, `Item`, `Year`, `average_rain_fall_mm_per_year`, `pesticides_tonnes`, `avg_temp`), target definitions, category lists, and empirical feature ranges.
+- `preprocessing.py` - Preprocessing pipeline construction (`OneHotEncoder` for categoricals `Area` & `Item`, `StandardScaler` for numericals).
+- `train.py` - Pipeline script: loads `data/raw/crop_yield.csv`, computes target in metric tons/ha, splits train/test, fits preprocessor, trains models, evaluates metrics, selects the best model, and saves `.joblib` artifacts.
 - `evaluate.py` - Evaluation metrics utility functions (`evaluate_model` returning MAE, RMSE, R²).
-- `predict.py` - Inference entry point exposing `predict_yield(input_dict: dict) -> float`.
+- `predict.py` - Production inference entrypoint exposing `predict_yield(input_dict: dict) -> float` with alias normalization.
 - `model/` - Contains saved model and preprocessor artifacts (git-ignored).
 
 ---
 
-## Dataset
+## Dataset & Feature Schema
+- **Data Source**: FAOSTAT (FAO crop yields & pesticides) & World Bank Climate API (annual precipitation & temperature).
 - **Location**: `data/raw/crop_yield.csv`
-- **Records**: 1500 complete agricultural records
-- **Features**:
-  - Categorical: `crop` (Wheat, Rice, Maize, Cotton, Sugarcane), `soil_type` (Loamy, Sandy, Clay, Silt, Peaty)
-  - Numerical: `area` (ha), `rainfall` (mm), `temperature` (°C), `humidity` (%), `fertilizer` (kg/ha)
-- **Target**: `yield` (tons/hectare)
+- **Total Records**: 28,242 real country-crop records across 101 countries (1990–2013).
+- **Categorical Features**: `Area` (Country), `Item` (Crop type)
+- **Numerical Features**: `Year` (Observation year), `average_rain_fall_mm_per_year` (mm/year), `pesticides_tonnes` (total tonnes of pesticide consumption), `avg_temp` (average temperature in °C)
+- **Target Variable**: `yield_tons_per_ha` (converted from dataset `hg/ha_yield` via $\text{yield} = \text{hg/ha\_yield} / 10000.0$)
 
 ---
 
-## Preprocessing Pipeline
-1. **Categorical Features**: Encoded using `OneHotEncoder(handle_unknown='ignore', sparse_output=False)`
-2. **Numerical Features**: Scaled using `StandardScaler()`
-3. **ColumnTransformer**: Combines categorical and numerical transformers in a single pipeline saved as `ml/model/preprocessor.joblib`.
+## Model Evaluation & Performance (Empirical Real Results)
 
----
-
-## Model Evaluation & Performance (Actual Execution Metrics)
-
-Train/Test Split: 80% Train (1200 records) / 20% Test (300 records) with `random_state=42`.
+Train/Test Split: 80% Train (22,593 records) / 20% Test (5,649 records) with `random_state=42`.
 
 | Model | MAE (tons/ha) | RMSE (tons/ha) | R² Score | Status |
 |-------|---------------|----------------|----------|--------|
-| Linear Regression (Baseline) | 3.7146 | 5.6813 | 0.9280 | Evaluated |
-| **Random Forest Regressor (Primary)** | **1.1585** | **2.4520** | **0.9866** | **Selected & Saved** |
+| Linear Regression (Baseline) | 2.9582 | 4.2144 | 0.7551 | Evaluated |
+| **Random Forest Regressor (Primary)** | **0.3480** | **0.9422** | **0.9878** | **Selected & Saved** |
 
 ### Selection Rationale
-Random Forest Regressor achieved an R² of **0.9866** and RMSE of **2.4520** tons/ha, significantly outperforming Linear Regression (R² = 0.9280, RMSE = 5.6813). Random Forest captures non-linear interactions between temperature, rainfall curves, crop requirements, and soil factors effectively.
+Random Forest Regressor achieved an R² score of **0.9878** and RMSE of **0.9422** tons/ha, outperforming Linear Regression (R² = 0.7551, RMSE = 4.2144). The non-linear ensemble tree structure accurately models complex interactions between regional climate, input intensity, country agro-ecological factors, and specific crop yield responses.
 
 ---
 
@@ -61,27 +54,28 @@ Developer 2 can import `predict_yield` directly from `ml.predict`:
 from ml.predict import predict_yield
 
 sample_input = {
-    "crop": "Wheat",
-    "area": 10.0,
-    "rainfall": 600.0,
-    "temperature": 25.0,
-    "humidity": 65.0,
-    "soil_type": "Loamy",
-    "fertilizer": 100.0,
+    "Area": "India",
+    "Item": "Wheat",
+    "Year": 2010,
+    "average_rain_fall_mm_per_year": 1083.0,
+    "pesticides_tonnes": 40000.0,
+    "avg_temp": 24.5
 }
 
 predicted_val = predict_yield(sample_input)
-# Returns float, e.g., 3.97 (tons/hectare)
+# Returns float: 2.84 (tons/hectare)
 ```
 
-Also, feature metadata for `GET /api/metadata` can be imported from `ml.features`:
+Both exact dataset keys (`Area`, `Item`, `Year`, `average_rain_fall_mm_per_year`, `pesticides_tonnes`, `avg_temp`) and standard alias keys (`country`, `crop`, `year`, `rainfall`, `pesticides`, `temperature`) are accepted.
+
+Feature metadata for `GET /api/metadata` can be imported from `ml.features`:
 
 ```python
-from ml.features import FEATURE_RANGES, SUPPORTED_CROPS, SUPPORTED_SOIL_TYPES
+from ml.features import FEATURE_RANGES, SUPPORTED_CROPS, SUPPORTED_COUNTRIES
 ```
 
 ---
 
 ## Known Limitations
-- The model assumes standard agricultural management practices without extreme weather anomalies (e.g. floods, droughts).
-- Input values should lie reasonably near expected feature ranges.
+- The dataset measures national-level pesticide consumption (`pesticides_tonnes`) rather than individual field-level NPK fertilizer application rates.
+- Unobserved hyper-local soil chemistry metrics (`soil_type`) and relative humidity (`humidity`) are not recorded in the original FAO/World Bank dataset and are excluded from the model.
