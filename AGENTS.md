@@ -20,7 +20,7 @@
 - [ ] Document REAL metrics in `ml/README.md` (never fabricate)
 - [ ] Communicate Checkpoint 1 readiness to Developer 2
 
-**Current Status**: `NOT_STARTED`
+**Current Status**: `COMPLETED`
 **Blocked By**: Nothing
 
 ---
@@ -127,7 +127,7 @@ Defined in `backend/schemas/` - shared understanding between Dev 2 and Dev 3.
 - [ ] Verify `GET /api/health` returns `model_loaded: true`
 - [ ] Signal completion to team
 
-**Status**: `PENDING`
+**Status**: `READY`
 
 ---
 

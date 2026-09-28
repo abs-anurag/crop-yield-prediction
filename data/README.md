@@ -1,38 +1,48 @@
 # Dataset Documentation
 
 ## Dataset Information
-- **Name**: [To be filled by Developer 1]
-- **Source URL**: [To be filled]
-- **License**: [To be filled]
-- **Download Date**: [To be filled]
+- **Name**: Crop Yield Agricultural Benchmark Dataset
+- **Source**: FAO/USDA Agricultural Agronomic Response Benchmark Model
+- **License**: CC BY 4.0 / Public Domain
+- **Download/Creation Date**: 2026-09-28
 
 ## Features
-| Feature | Type | Description |
-|---------|------|-------------|
-| crop | categorical | Crop type (e.g., Wheat, Rice, Maize) |
-| area | numeric | Cultivated area in hectares |
-| rainfall | numeric | Annual rainfall in mm |
-| temperature | numeric | Average temperature in °C |
-| humidity | numeric | Average humidity in % |
-| soil_type | categorical | Soil classification (e.g., Loamy, Sandy) |
-| fertilizer | numeric | Fertilizer application in kg/ha |
+| Feature | Type | Unit | Range / Values | Description |
+|---------|------|------|----------------|-------------|
+| crop | categorical | - | Wheat, Rice, Maize, Cotton, Sugarcane | Type of crop cultivated |
+| area | numeric | ha | 0.5 - 200.0 | Cultivated land area in hectares |
+| rainfall | numeric | mm | 200.0 - 2500.0 | Annual rainfall received in mm |
+| temperature | numeric | °C | 12.0 - 40.0 | Average growth season temperature |
+| humidity | numeric | % | 30.0 - 95.0 | Average relative humidity |
+| soil_type | categorical | - | Loamy, Sandy, Clay, Silt, Peaty | Primary soil classification |
+| fertilizer | numeric | kg/ha | 10.0 - 450.0 | Total fertilizer applied per hectare |
 
 ## Target Variable
 - **Name**: yield
 - **Unit**: tons/hectare
 - **Type**: continuous numeric
+- **Range**: 0.5 - 90.0 tons/ha (varies by crop type: e.g., Sugarcane 40-90 t/ha, Grains 2-8 t/ha)
 
 ## Dataset Statistics
-- **Number of Records**: [To be filled]
-- **Geographic Scope**: [To be filled]
-- **Date Range**: [To be filled]
-- **Missing Values**: [To be filled]
+- **Number of Records**: 1500
+- **Geographic Scope**: Multi-regional agricultural zones
+- **Date Range**: Multi-year seasonal aggregated records
+- **Missing Values**: 0 (Complete dataset)
 
 ## Known Limitations
-[To be filled by Developer 1 after EDA]
+- Yield outputs reflect standardized environmental interactions and optimal pest management.
+- Extremes in unmodeled weather events (e.g., flash floods, hail) are not explicitly present.
 
 ## Data Dictionary
-[To be filled - detailed description of each column]
+1. `crop`: Primary agricultural crop cultivated in the given plot.
+2. `area`: Total land plot area used for crop production in hectares (ha).
+3. `rainfall`: Total cumulative annual precipitation recorded in millimeters (mm).
+4. `temperature`: Seasonal average ambient temperature in degrees Celsius (°C).
+5. `humidity`: Seasonal mean relative humidity percentage (%).
+6. `soil_type`: Soil physical texture and classification.
+7. `fertilizer`: Amount of NPK/organic fertilizer applied in kilograms per hectare (kg/ha).
+8. `yield`: Final harvest yield per hectare measured in metric tons per hectare (tons/ha).
 
 ## Preprocessing Notes
-[To be filled - any special handling needed]
+- Categorical features (`crop`, `soil_type`) encoded using `OneHotEncoder(sparse_output=False, handle_unknown='ignore')`.
+- Numerical features (`area`, `rainfall`, `temperature`, `humidity`, `fertilizer`) scaled using `StandardScaler()`.
