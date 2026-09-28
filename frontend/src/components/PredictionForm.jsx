@@ -88,7 +88,10 @@ export default function PredictionForm({
         </div>
       )}
 
-      <h2 className={styles.sectionTitle}>AGRICULTURAL CONDITIONS</h2>
+      <header className={styles.formHeader}>
+        <span className={styles.formNumber}>01</span>
+        <h2 className={styles.formTitle}>AGRICULTURAL CONDITIONS</h2>
+      </header>
 
       <div className={styles.grid}>
         <InputField
@@ -217,7 +220,7 @@ export default function PredictionForm({
           disabled={loading || disabled}
           aria-busy={loading}
         >
-          {loading ? 'Analyzing…' : 'Predict yield →'}
+          {loading ? 'Analyzing…' : 'Predict yield'}
         </button>
       </div>
     </form>

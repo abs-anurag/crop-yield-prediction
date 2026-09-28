@@ -3,6 +3,7 @@
   --color-bg-subtle: #F5F5F3;
   --color-text-primary: #0A0A0A;
   --color-text-secondary: #4A4A4A;
+  --color-text-tertiary: #9A9A9A;
   --color-text-light: #FFFFFF;
   --color-border: #E0E0E0;
   --color-border-strong: #0A0A0A;
@@ -20,6 +21,8 @@
   --text-xl: 22px;
   --text-2xl: 30px;
   --text-3xl: 46px;
+  --text-4xl: 72px;
+  --text-5xl: 108px;
 
   --weight-normal: 400;
   --weight-medium: 500;
@@ -38,6 +41,7 @@
   --space-12: 42px;
   --space-13: 56px;
   --space-14: 98px;
+  --space-15: 140px;
 
   --radius: 0px;
 
@@ -48,6 +52,9 @@
   --motion-base: 0.2s;
   --motion-slow: 0.4s;
   --motion-easing: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --container-max: 1200px;
+  --container-narrow: 720px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -56,6 +63,7 @@
     --color-bg-subtle: #141414;
     --color-text-primary: #F5F5F3;
     --color-text-secondary: #9A9A9A;
+    --color-text-tertiary: #6A6A6A;
     --color-text-light: #0A0A0A;
     --color-border: #2A2A2A;
     --color-border-strong: #F5F5F3;
@@ -115,7 +123,7 @@ input, select {
 }
 
 input::placeholder {
-  color: var(--color-text-secondary);
+  color: var(--color-text-tertiary);
 }
 
 select {

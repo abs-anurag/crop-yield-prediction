@@ -27,9 +27,9 @@ function PredictionNumber({ value }) {
   useEffect(() => {
     if (animatingRef.current) return
     animatingRef.current = true
-    animateNumber(prevValueRef.current, value, 800, setDisplayValue)
+    animateNumber(prevValueRef.current, value, 1000, setDisplayValue)
     prevValueRef.current = value
-    setTimeout(() => { animatingRef.current = false }, 800)
+    setTimeout(() => { animatingRef.current = false }, 1000)
   }, [value])
 
   return (
@@ -56,9 +56,15 @@ export default function PredictionResult({ prediction, formData, onNewPrediction
 
   return (
     <section className={styles.section} aria-labelledby="result-heading">
-      <div className={styles.content}>
-        <h2 id="result-heading" className={styles.title}>PREDICTED YIELD</h2>
+      <header className={styles.header}>
+        <span className={styles.stepNumber}>03</span>
+        <div>
+          <h2 id="result-heading" className={styles.title}>ESTIMATE</h2>
+          <p className={styles.subtitle}>Predicted crop yield</p>
+        </div>
+      </header>
 
+      <div className={styles.content}>
         <div className={styles.yieldDisplay}>
           <PredictionNumber value={yieldValue} />
           <span className={styles.unit}>{unit.toUpperCase()}</span>

@@ -11,16 +11,20 @@ const loadingFields = [
 export default function LoadingVisualization() {
   return (
     <div className={styles.container} role="status" aria-live="polite" aria-busy="true">
-      <h3 className={styles.title}>ANALYZING AGRICULTURAL CONDITIONS</h3>
+      <header className={styles.header}>
+        <span className={styles.stepNumber}>02</span>
+        <h3 className={styles.title}>ANALYZE</h3>
+      </header>
+      <p className={styles.subtitle}>Processing agricultural conditions</p>
       <div className={styles.bars}>
         {loadingFields.map((field, index) => (
           <div key={field.label} className={styles.barWrapper} style={{ '--delay': `${field.delay}s` }}>
+            <span className={styles.barLabel}>{field.label}</span>
             <div className={styles.barTrack}>
               <div className={styles.barFill}>
                 <span className={styles.barEnd} aria-hidden="true">●</span>
               </div>
             </div>
-            <span className={styles.barLabel}>{field.label}</span>
           </div>
         ))}
       </div>

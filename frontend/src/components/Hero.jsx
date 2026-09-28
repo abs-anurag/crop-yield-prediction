@@ -6,15 +6,13 @@ export default function Hero({ onCTAClick }) {
     <section className={styles.hero} aria-labelledby="hero-heading">
       <div className={styles.grid}>
         <div className={styles.textColumn}>
+          <span className={styles.eyebrow}>01 / CROP YIELD AI</span>
           <h2 id="hero-heading" className={styles.heading}>
-            <span className={styles.headingLine}>AI AGRICULTURAL</span>
-            <span className={styles.headingLine}>INTELLIGENCE</span>
+            <span className={styles.headingLine}>Know your field.</span>
+            <span className={styles.headingLine}>Estimate your yield.</span>
           </h2>
           <p className={styles.copy}>
-            Predict crop yield from field conditions.
-          </p>
-          <p className={styles.copySecondary}>
-            Understand how rainfall, temperature, soil, and crop type influence estimated yield.
+            Estimate crop yield from agricultural and environmental conditions using data-driven machine learning.
           </p>
           <button
             className={styles.cta}
@@ -22,6 +20,7 @@ export default function Hero({ onCTAClick }) {
             aria-label="Scroll to prediction form"
           >
             Predict yield
+            <span className={styles.ctaArrow} aria-hidden="true">→</span>
           </button>
         </div>
         <div className={styles.visualColumn} aria-hidden="true">
