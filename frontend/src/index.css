@@ -1,0 +1,154 @@
+:root {
+  --color-bg: #FFFFFF;
+  --color-bg-subtle: #F5F5F3;
+  --color-text-primary: #0A0A0A;
+  --color-text-secondary: #4A4A4A;
+  --color-text-light: #FFFFFF;
+  --color-border: #E0E0E0;
+  --color-border-strong: #0A0A0A;
+  --color-accent: #2C4A1E;
+  --color-error: #C0392B;
+
+  --font-display: 'Times New Roman', Georgia, serif;
+  --font-body: Arial, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'SFMono-Regular', 'SF Mono', Consolas, monospace;
+
+  --text-xs: 11px;
+  --text-sm: 13px;
+  --text-base: 15px;
+  --text-lg: 16px;
+  --text-xl: 22px;
+  --text-2xl: 30px;
+  --text-3xl: 46px;
+
+  --weight-normal: 400;
+  --weight-medium: 500;
+
+  --space-1: 1px;
+  --space-2: 2px;
+  --space-3: 4px;
+  --space-4: 8px;
+  --space-5: 9px;
+  --space-6: 12px;
+  --space-7: 18px;
+  --space-8: 20px;
+  --space-9: 26px;
+  --space-10: 28px;
+  --space-11: 30px;
+  --space-12: 42px;
+  --space-13: 56px;
+  --space-14: 98px;
+
+  --radius: 0px;
+
+  --motion-fast-1: 0.1s;
+  --motion-fast-2: 0.21s;
+  --motion-fast-3: 0.36s;
+  --motion-fast-4: 0.44s;
+  --motion-base: 0.2s;
+  --motion-slow: 0.4s;
+  --motion-easing: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #0A0A0A;
+    --color-bg-subtle: #141414;
+    --color-text-primary: #F5F5F3;
+    --color-text-secondary: #9A9A9A;
+    --color-text-light: #0A0A0A;
+    --color-border: #2A2A2A;
+    --color-border-strong: #F5F5F3;
+    --color-accent: #5A8A3C;
+    --color-error: #E74C3C;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--weight-normal);
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+input, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+input::placeholder {
+  color: var(--color-text-secondary);
+}
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234A4A4A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 32px;
+}
+
+:focus-visible {
+  outline: 1px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-text-light);
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

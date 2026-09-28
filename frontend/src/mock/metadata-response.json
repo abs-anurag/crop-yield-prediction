@@ -1,0 +1,11 @@
+{
+  "supported_crops": ["Wheat", "Rice", "Maize", "Cotton", "Sugarcane"],
+  "supported_soil_types": ["Loamy", "Sandy", "Clay", "Silt", "Peaty"],
+  "feature_ranges": {
+    "rainfall": { "min": 0, "max": 5000, "unit": "mm" },
+    "temperature": { "min": -10, "max": 60, "unit": "°C" },
+    "humidity": { "min": 0, "max": 100, "unit": "%" },
+    "fertilizer": { "min": 0, "max": 2000, "unit": "kg/ha" },
+    "area": { "min": 0.1, "max": 10000, "unit": "ha" }
+  }
+}

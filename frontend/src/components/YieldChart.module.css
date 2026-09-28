@@ -1,0 +1,96 @@
+.container {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.track {
+  transition: opacity var(--motion-base);
+}
+
+.markerLine {
+  transform-origin: center bottom;
+  animation: markerSlide 0.6s var(--motion-easing) forwards;
+  transform: scaleY(0);
+}
+
+.marker {
+  transform-origin: center;
+  animation: markerPop 0.4s var(--motion-easing) 0.5s forwards;
+  opacity: 0;
+  transform: scale(0);
+}
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--space-6);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+.valueLabel {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--color-accent);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+}
+
+.minLabel,
+.maxLabel {
+  white-space: nowrap;
+}
+
+.markerLabel {
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-4);
+  animation: fadeIn var(--motion-fast-2) 0.6s forwards;
+  opacity: 0;
+}
+
+@keyframes markerSlide {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes markerPop {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .markerLine,
+  .marker,
+  .markerLabel {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
